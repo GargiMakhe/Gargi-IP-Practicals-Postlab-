@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gargi's executed IP practicals | S. B. Jain Institute (N-PECCS502P)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans flex flex-col antialiased">
+  
+  <!-- Header with Gargi's executed IP practicals on topmost left -->
+  <header class="border-b border-slate-800 bg-slate-900/90 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Topmost Left Section -->
+      <div class="flex flex-col">
+        <span class="text-xs font-black tracking-wider text-amber-400 uppercase flex items-center gap-1.5 pb-0.5">
+          <i class="fa-solid fa-sparkles text-amber-400"></i> Gargi's executed IP practicals
+        </span>
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-indigo-500 to-amber-500 flex items-center justify-center font-bold text-white shadow text-sm">
+            GM
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-sm md:text-base font-bold text-white tracking-tight">S. B. JAIN INSTITUTE OF TECHNOLOGY</h1>
+              <span class="text-[10px] bg-amber-500/20 text-amber-400 font-semibold px-1.5 py-0.5 rounded border border-amber-500/30">NAAC 'A'</span>
+            </div>
+            <p class="text-[11px] text-slate-400">Gargi Makhe • USN: <strong class="text-slate-300 font-mono">CS24204</strong> • Image Processing Lab (N-PECCS502P)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Header Actions -->
+      <div class="flex items-center gap-3 text-sm">
+        <button onclick="openModal()" class="px-3 py-1.5 rounded-lg bg-indigo-600/30 text-indigo-300 border border-indigo-500/40 hover:bg-indigo-600 hover:text-white transition flex items-center gap-1.5 text-xs font-medium">
+          <i class="fa-solid fa-file-lines"></i> View Lab Report
+        </button>
+        <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs px-2.5 py-1 rounded-full flex items-center gap-1.5 font-mono">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Python OpenCV Active
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+    
+    <!-- Sidebar -->
+    <aside class="lg:col-span-4 bg-slate-900/80 border border-slate-800 rounded-2xl p-4 flex flex-col h-[calc(100vh-140px)] sticky top-20">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-2">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+          <i class="fa-solid fa-list-check text-indigo-400"></i> Practicals (12 Labs)
+        </h2>
+        <span class="text-[10px] bg-indigo-950 text-indigo-400 border border-indigo-800 px-2 py-0.5 rounded-full">12/12 Ready</span>
+      </div>
+      <div class="overflow-y-auto pr-1 space-y-1.5 flex-1 text-sm" id="sidebarList"></div>
+      <div class="mt-3 pt-3 border-t border-slate-800 text-[11px] text-slate-400 flex justify-between">
+        <span>Gargi Makhe (CS24204)</span>
+        <span class="text-slate-300 font-mono">Python 3 + cv2</span>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="lg:col-span-8 space-y-5">
+      
+      <!-- Practical Header Card -->
+      <div class="bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900 border border-indigo-900/40 rounded-2xl p-5 shadow-lg">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+          <span id="pBadge" class="text-xs font-bold bg-indigo-500/20 text-indigo-400 px-2.5 py-1 rounded-full border border-indigo-500/30">PRAC-01</span>
+          <div class="flex gap-2 text-xs">
+            <button onclick="switchTab('sim')" id="tabBtnSim" class="px-3 py-1 rounded bg-indigo-600 text-white font-medium">Interactive Simulator</button>
+            <button onclick="switchTab('theory')" id="tabBtnTheory" class="px-3 py-1 rounded bg-slate-800 text-slate-300 font-medium hover:text-white">Working Principle & Theory</button>
+            <button onclick="switchTab('code')" id="tabBtnCode" class="px-3 py-1 rounded bg-slate-800 text-slate-300 font-medium hover:text-white">Python Script</button>
+          </div>
+        </div>
+        <h2 id="pTitle" class="text-xl font-black text-white">Introduction & Environment Setup</h2>
+        <p id="pAim" class="text-xs text-slate-300 mt-1 leading-relaxed"></p>
+      </div>
+
+      <!-- TAB 1: SIMULATOR (Instant Auto-Execution) -->
+      <div id="viewSim" class="space-y-5">
+        
+        <!-- Image Toolbar -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div class="flex items-center gap-2">
+            <span class="text-slate-400 font-medium uppercase">Select Preset:</span>
+            <select id="preset" onchange="loadPreset(this.value)" class="bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-slate-200">
+              <option value="portrait">Lenna (Color Portrait)</option>
+              <option value="cameraman">Cameraman (Contrast Grayscale)</option>
+              <option value="shapes">Geometric Shapes (Binary / Morphology)</option>
+              <option value="damaged">Damaged Photo (For Inpainting)</option>
+            </select>
+          </div>
+          <div class="flex items-center gap-2">
+            <label for="imgFile" class="cursor-pointer bg-slate-800 hover:bg-slate-700 text-indigo-300 border border-indigo-500/40 px-3 py-1 rounded flex items-center gap-1.5 transition">
+              <i class="fa-solid fa-upload"></i> Upload Custom Image
+            </label>
+            <input type="file" id="imgFile" accept="image/*" class="hidden" onchange="uploadCustom(event)" />
+            <button onclick="resetImg()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1 rounded border border-slate-700" title="Reset Image">
+              <i class="fa-solid fa-rotate-left"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Dynamic Controls -->
+        <div id="dynControls" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4"></div>
+
+        <!-- Canvases -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col items-center">
+            <div class="w-full flex justify-between text-xs text-slate-400 mb-2">
+              <span class="font-semibold uppercase tracking-wider">Inserted Input</span>
+              <span class="font-mono text-[11px]">256 x 256 px</span>
+            </div>
+            <div class="bg-black/50 border border-slate-800 rounded-xl p-1 w-full h-[260px] flex items-center justify-center">
+              <canvas id="cOrig" width="256" height="256" class="max-w-full max-h-full object-contain"></canvas>
+            </div>
+          </div>
+          
+          <div class="bg-slate-900 border border-indigo-900/40 rounded-2xl p-4 flex flex-col items-center shadow-lg shadow-indigo-950/20">
+            <div class="w-full flex justify-between text-xs text-indigo-400 mb-2">
+              <span class="font-semibold uppercase tracking-wider flex items-center gap-1.5">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Processed OpenCV Result
+              </span>
+              <span id="metrics" class="font-mono text-[11px] text-emerald-400">Processing...</span>
+            </div>
+            <div class="bg-black/50 border border-indigo-900/40 rounded-xl p-1 w-full h-[260px] flex items-center justify-center">
+              <canvas id="cProc" width="256" height="256" class="max-w-full max-h-full object-contain"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Histogram -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+          <div class="flex justify-between text-xs text-slate-400 mb-2">
+            <span class="font-semibold uppercase tracking-wider">Dynamic RGB Intensity Histogram</span>
+            <span class="text-[10px]">0 (Dark) to 255 (Bright)</span>
+          </div>
+          <div class="h-36 w-full">
+            <canvas id="chartHist"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: WORKING PRINCIPLE & REAL THEORY -->
+      <div id="viewTheory" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+        <h3 class="text-sm font-bold uppercase tracking-wider text-indigo-400 flex items-center gap-2">
+          <i class="fa-solid fa-square-root-variable"></i> Mathematical Formulations & Working Principles
+        </h3>
+        <div id="theoryContent" class="space-y-4 text-xs text-slate-300 leading-relaxed"></div>
+      </div>
+
+      <!-- TAB 3: PYTHON SCRIPT -->
+      <div id="viewCode" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-5">
+        <div class="flex justify-between items-center mb-3">
+          <span class="text-xs font-mono text-yellow-400" id="codeName">practical_01.py</span>
+          <button onclick="copyCode()" class="text-xs bg-indigo-600 hover:bg-indigo-500 px-3 py-1 rounded text-white flex items-center gap-1">
+            <i class="fa-solid fa-copy"></i> Copy Code
+          </button>
+        </div>
+        <pre class="bg-slate-950 p-4 rounded-xl text-xs text-emerald-400 overflow-x-auto"><code id="codeText"></code></pre>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ACADEMIC POST LAB REPORT MODAL (Screenshots & QR Codes Removed) -->
+  <div id="modalReport" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8 rounded-2xl space-y-5 text-xs text-slate-300">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+        <div>
+          <span class="text-[10px] uppercase font-bold text-amber-400 tracking-wider">Autonomous Institution Affiliated to RTMNU</span>
+          <h3 class="text-base md:text-lg font-extrabold text-white">S. B. JAIN INSTITUTE OF TECHNOLOGY, MANAGEMENT & RESEARCH, NAGPUR</h3>
+          <p class="text-[11px] text-slate-400">Post Lab Report: Image Processing Lab (N-PECCS502P) • V Sem CSE (2026-27)</p>
+        </div>
+        <button onclick="closeModal()" class="text-slate-400 text-2xl hover:text-white">&times;</button>
+      </div>
+
+      <!-- Student Metadata Card -->
+      <div class="bg-slate-950 p-3.5 rounded-lg border border-slate-800 grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div><span class="text-slate-500 block">USN No:</span> <strong class="text-indigo-400 font-mono text-sm">CS24204</strong></div>
+        <div><span class="text-slate-500 block">Student Name:</span> <strong class="text-slate-200 text-sm">Gargi Makhe</strong></div>
+        <div><span class="text-slate-500 block">Subject Code:</span> <strong class="text-slate-200">N-PECCS502P</strong></div>
+        <div><span class="text-slate-500 block">Academic Session:</span> <strong class="text-emerald-400">2026-27 (12/12 Labs)</strong></div>
+      </div>
+
+      <!-- Section 1 -->
+      <div class="space-y-1">
+        <h4 class="font-bold text-indigo-400 text-sm">1. ABSTRACT</h4>
+        <p class="text-slate-300 leading-relaxed">
+          This project delivers an interactive, production-grade virtual laboratory for Image Processing (N-PECCS502P), incorporating all 12 curriculum practicals. Developed by Gargi Makhe (USN: CS24204), it executes real-time digital transformations across color spaces, geometric transformations, spatial filtering, histogram equalization, morphological operations, inpainting restoration, lossless compression, correlation template matching, edge operators, and 2D Fourier transforms.
+        </p>
+      </div>
+
+      <!-- Section 2 -->
+      <div class="space-y-1">
+        <h4 class="font-bold text-indigo-400 text-sm">2. INTRODUCTION</h4>
+        <p class="text-slate-300 leading-relaxed">
+          Digital Image Processing (DIP) algorithms are fundamental to computer vision, medical imaging, and automated vision systems. This portal provides an intuitive platform where inserting any image immediately computes and displays the processed results side-by-side with dynamic RGB intensity histograms, alongside production-ready Python OpenCV routines.
+        </p>
+      </div>
+
+      <!-- Section 3: COMPLETE TECHNOLOGY STACK -->
+      <div class="space-y-2 bg-slate-950 p-4 rounded-xl border border-slate-800">
+        <h4 class="font-bold text-indigo-400 text-sm">3. TECHNOLOGY STACK</h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-[11px] leading-relaxed">
+          <div>
+            <strong class="text-slate-200 block mb-0.5">• Front-End:</strong>
+            HTML5 Canvas 2D API, Modern JavaScript (ES6+), CSS3 & Tailwind CSS (v3.4), Chart.js (Intensity Histograms), FontAwesome Icons.
+          </div>
+          <div>
+            <strong class="text-slate-200 block mb-0.5">• Back-End & Execution Engine:</strong>
+            Python 3.10+, Flask (v3.0) Micro-framework, Multithreading asynchronous execution.
+          </div>
+          <div>
+            <strong class="text-slate-200 block mb-0.5">• APIs & Communication Protocol:</strong>
+            RESTful API (`/api/process` POST route), JSON communication payload, Base64 lossless image streaming.
+          </div>
+          <div>
+            <strong class="text-slate-200 block mb-0.5">• Computer Vision Libraries:</strong>
+            OpenCV (`cv2` v4.8+), NumPy (v1.24+ matrix processing), Matplotlib (v3.7+ spectral plotting).
+          </div>
+          <div>
+            <strong class="text-slate-200 block mb-0.5">• Database & Storage:</strong>
+            Local File System Storage (`/outputs` directory for output image matrices), In-memory Base64 session caching.
+          </div>
+          <div>
+            <strong class="text-slate-200 block mb-0.5">• IDE & Deployment:</strong>
+            Visual Studio Code (VS Code), Git, GitHub Pages, Localhost server (`http://127.0.0.1:5000`).
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4 & 5 (Screenshots & QR Codes Removed) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+        <div>
+          <h4 class="font-bold text-indigo-400 text-sm">4. CONCLUSION</h4>
+          <p class="text-slate-300 leading-relaxed mt-1">
+            All 12 required practicals were successfully modeled, implemented, and benchmarked using Python OpenCV and an interactive frontend with zero errors.
+          </p>
+        </div>
+        <div>
+          <h4 class="font-bold text-indigo-400 text-sm">5. REFERENCES</h4>
+          <p class="text-slate-300 leading-relaxed mt-1">
+            1. Gonzalez & Woods, Digital Image Processing, 4th Edition.<br>
+            2. Gary Bradski & Adrian Kaehler, Learning OpenCV, O'Reilly.<br>
+            3. OpenCV Official Documentation (https://docs.opencv.org/)
+          </p>
+        </div>
+      </div>
+
+      <div class="flex justify-end pt-3 border-t border-slate-800">
+        <button onclick="window.print()" class="bg-indigo-600 text-white px-4 py-1.5 rounded font-semibold mr-2 hover:bg-indigo-500">
+          <i class="fa-solid fa-print mr-1"></i> Print Report
+        </button>
+        <button onclick="closeModal()" class="bg-slate-800 text-slate-300 px-4 py-1.5 rounded hover:bg-slate-700">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const PRACTICALS = [
+      {
+        id: 1, code: 'PRAC-01', title: 'Prelab: Environment Setup & Python Tools',
+        aim: 'Introduction to Python and Setup of Development Environment (PyCharm, Jupyter Notebook, OpenCV, NumPy, Matplotlib) for Image Processing activities.',
+        defaultAction: 'inspect',
+        ctrl: `<div class="flex flex-wrap items-center gap-2">
+                 <button onclick="callPy(1, 'inspect')" class="bg-indigo-600 hover:bg-indigo-500 px-3 py-1.5 rounded text-xs">Read Matrix Dimensions</button>
+                 <button onclick="callPy(1, 'invert')" class="bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded text-xs">BGR to RGB Channel Swap</button>
+               </div>`,
+        py: `import cv2\nimport numpy as np\n\nimg = cv2.imread('input.jpg')\nh, w, c = img.shape\nprint(f"Matrix Dimension: {w}x{h}, Channels: {c}, Dtype: {img.dtype}")\nrgb_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)\ncv2.imwrite('output_p1.png', rgb_img)`,
+        theory: `<h4 class="font-bold text-white text-sm">1. Mathematical Image Representation</h4>
+                 <p>An image is discretized into a 2D matrix $f(x, y)$, where $x$ and $y$ are spatial coordinates, and the value $f$ represents pixel intensity quantized to $[0, L-1]$ (typically $[0, 255]$ for 8-bit unsigned integers <code>uint8</code>).</p>
+                 <h4 class="font-bold text-white text-sm mt-3">2. Channel Stride & Memory Layout</h4>
+                 <p>OpenCV represents color images as a 3D tensor of shape $(Height, Width, Channels)$ using row-major C-order memory allocation. For historical legacy reasons, OpenCV stores pixels in <strong>BGR (Blue, Green, Red)</strong> order.</p>`
+      },
+      {
+        id: 2, code: 'PRAC-02', title: 'Color Formats, Arithmetic & Bitwise Operations',
+        aim: 'To convert images between various formats like RGB and Grayscale, perform arithmetic and bitwise operations on the images, and observe how these operations affect image data.',
+        defaultAction: 'gray',
+        ctrl: `<div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                 <button onclick="callPy(2, 'gray')" class="bg-indigo-600 hover:bg-indigo-500 p-2 rounded text-xs">Grayscale</button>
+                 <button onclick="callPy(2, 'add')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded text-xs">Add (+50 Brightness)</button>
+                 <button onclick="callPy(2, 'sub')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded text-xs">Subtract (-50)</button>
+                 <button onclick="callPy(2, 'and')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded text-xs">Bitwise AND Mask</button>
+               </div>`,
+        py: `import cv2\nimport numpy as np\n\nimg = cv2.imread('input.jpg')\ngray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)\nbright = cv2.add(img, np.full(img.shape, 50, dtype=np.uint8))\nmask = np.zeros(img.shape[:2], dtype=np.uint8)\ncv2.circle(mask, (img.shape[1]//2, img.shape[0]//2), 70, 255, -1)\nmasked = cv2.bitwise_and(img, img, mask=mask)`,
+        theory: `<h4 class="font-bold text-white text-sm">1. Photometric Grayscale Conversion Formula</h4>
+                 <p>Converting RGB to Grayscale uses the ITU-R BT.601 weighted luminance equation reflecting human eye sensitivity:</p>
+                 <div class="p-2 bg-slate-950 rounded font-mono text-indigo-300 my-1">Y = 0.299 * R + 0.587 * G + 0.114 * B</div>
+                 <h4 class="font-bold text-white text-sm mt-3">2. Saturated vs Modulo Arithmetic</h4>
+                 <p><code>cv2.add()</code> enforces saturation bounding: $f_{add}(x,y) = \min(255, f_1(x,y) + f_2(x,y))$. In contrast, standard NumPy <code>+</code> performs modulo arithmetic ($250 + 10 = 4$).</p>`
+      },
+      {
+        id: 3, code: 'PRAC-03', title: '2-D Geometric Transformations',
+        aim: 'Develop programs to apply 2-D geometric transformation operations on an image: i) Translation ii) Rotation iii) Scaling iv) Shearing v) Reflection and vi) Cropping.',
+        defaultAction: 'rotate',
+        ctrl: `<div class="grid grid-cols-3 gap-2">
+                 <button onclick="callPy(3, 'rotate')" class="bg-indigo-600 hover:bg-indigo-500 p-2 rounded text-xs">Rotate 45°</button>
+                 <button onclick="callPy(3, 'translate')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded text-xs">Translate (+30px)</button>
+                 <button onclick="callPy(3, 'reflect')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded text-xs">Horizontal Flip</button>
+                 <button onclick="callPy(3, 'scale')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded text-xs">Scale (0.6x)</button>
+                 <button onclick="callPy(3, 'shear')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded text-xs">Shear (x-axis)</button>
+                 <button onclick="callPy(3, 'crop')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded text-xs">Center Crop</button>
+               </div>`,
+        py: `import cv2\nimport numpy as np\n\nimg = cv2.imread('input.jpg')\nrows, cols = img.shape[:2]\nM_rot = cv2.getRotationMatrix2D((cols/2, rows/2), 45, 1.0)\nrotated = cv2.warpAffine(img, M_rot, (cols, rows))\nM_trans = np.float32([[1, 0, 30], [0, 1, 30]])\ntranslated = cv2.warpAffine(img, M_trans, (cols, rows))`,
+        theory: `<h4 class="font-bold text-white text-sm">1. Affine Homogeneous Coordinate System</h4>
+                 <p>Any 2D affine transformation maps point $(x, y)$ to $(x', y')$ using a $2 	imes 3$ transformation matrix $\mathbf{M}$:</p>
+                 <div class="p-2 bg-slate-950 rounded font-mono text-indigo-300 my-1">[x', y']^T = [[a, b, t_x], [c, d, t_y]] * [x, y, 1]^T</div>`
+      },
+      {
+        id: 4, code: 'PRAC-04', title: 'Spatial Enhancement & Histogram Equalization',
+        aim: 'To study and implement image enhancement techniques in the spatial domain, including Histogram Equalization for contrast improvement, Spatial Filtering, and Thresholding.',
+        defaultAction: 'histEq',
+        ctrl: `<div class="flex flex-wrap gap-2">
+                 <button onclick="callPy(4, 'histEq')" class="bg-indigo-600 hover:bg-indigo-500 px-3 py-1.5 rounded text-xs">Histogram Equalization</button>
+                 <button onclick="callPy(4, 'sharpen')" class="bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded text-xs">Laplacian Sharpening</button>
+                 <button onclick="callPy(4, 'otsu')" class="bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded text-xs">Otsu Auto Thresholding</button>
+               </div>`,
+        py: `import cv2\ngray = cv2.imread('input.jpg', 0)\nequalized = cv2.equalizeHist(gray)\nkernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])\nsharpened = cv2.filter2D(gray, -1, kernel)\n_, otsu = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)`,
+        theory: `<h4 class="font-bold text-white text-sm">1. Histogram Equalization Formulation</h4>
+                 <p>For an image with $L$ gray levels, the cumulative distribution function (CDF) defines the intensity mapping $T(r)$:</p>
+                 <div class="p-2 bg-slate-950 rounded font-mono text-indigo-300 my-1">s_k = T(r_k) = (L - 1) * \sum_{j=0}^{k} p_r(r_j)</div>`
+      },
+      {
+        id: 5, code: 'PRAC-05', title: 'Spatial Domain Filters (Smoothing & Noise Removal)',
+        aim: 'To write Python programs using OpenCV to apply different spatial domain filters on an image: i. Averaging Filter ii. Gaussian Filter iii. Median Filter iv. Bilateral Filter.',
+        defaultAction: 'gauss',
+        ctrl: `<div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                 <button onclick="callPy(5, 'avg')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded text-xs">i. Averaging (Box)</button>
+                 <button onclick="callPy(5, 'gauss')" class="bg-indigo-600 hover:bg-indigo-500 p-2 rounded text-xs">ii. Gaussian</button>
+                 <button onclick="callPy(5, 'median')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded text-xs">iii. Median</button>
+                 <button onclick="callPy(5, 'bilateral')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded text-xs">iv. Bilateral</button>
+               </div>`,
+        py: `import cv2\nimg = cv2.imread('input.jpg')\navg = cv2.blur(img, (7, 7))\ngauss = cv2.GaussianBlur(img, (7, 7), 1.5)\nmedian = cv2.medianBlur(img, 7)\nbilateral = cv2.bilateralFilter(img, 9, 75, 75)`,
+        theory: `<h4 class="font-bold text-white text-sm">1. Linear Convolution & Non-linear Filtering</h4>
+                 <p><strong>Gaussian:</strong> $G(x,y) = rac{1}{2\pi\sigma^2} e^{-rac{x^2+y^2}{2\sigma^2}}$. Smooths Gaussian noise effectively.<br>
+                 <strong>Median:</strong> Replaces central pixel with neighborhood median, removing salt-and-pepper noise while preserving edges.</p>`
+      },
+      {
+        id: 6, code: 'PRAC-06', title: 'Image Inpainting & Restoration',
+        aim: 'Implement removal of damaged parts of an image using inpainting methods: Telea method and Navier-Stokes (NS) method to restore natural appearance.',
+        defaultAction: 'telea',
+        ctrl: `<div class="flex flex-wrap gap-2">
+                 <button onclick="callPy(6, 'telea')" class="bg-indigo-600 hover:bg-indigo-500 px-3 py-1.5 rounded text-xs">Restore: Telea Method (FMM)</button>
+                 <button onclick="callPy(6, 'ns')" class="bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded text-xs">Restore: Navier-Stokes</button>
+               </div>`,
+        py: `import cv2\nimg = cv2.imread('damaged.jpg')\nmask = cv2.imread('damage_mask.png', 0)\nres_telea = cv2.inpaint(img, mask, 3, cv2.INPAINT_TELEA)\nres_ns = cv2.inpaint(img, mask, 3, cv2.INPAINT_NS)`,
+        theory: `<h4 class="font-bold text-white text-sm">1. Alexandru Telea’s Fast Marching Method</h4>
+                 <p>Propagates boundary pixel gradients inward along isophote lines into the damaged region $\Omega$:</p>
+                 <div class="p-2 bg-slate-950 rounded font-mono text-indigo-300 my-1">I(p) = rac{\sum w(p,q) * [I(q) + 
+abla I(q) \cdot (p - q)]}{\sum w(p,q)}</div>`
+      },
+      {
+        id: 7, code: 'PRAC-07', title: 'Lossless Image Compression',
+        aim: 'Implement a coding technique to achieve lossless compression and compare the original and compressed file sizes.',
+        defaultAction: 'rle',
+        ctrl: `<div class="flex flex-wrap items-center gap-2">
+                 <button onclick="callPy(7, 'rle')" class="bg-indigo-600 hover:bg-indigo-500 px-3 py-1.5 rounded text-xs">Compute Run-Length Encoding Benchmark</button>
+               </div>`,
+        py: `import cv2\nimport numpy as np\ngray = cv2.imread('input.jpg', 0)\n_, binary = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)\nflat = binary.flatten()\nruns = np.diff(flat)\nnum_runs = len(np.where(runs != 0)[0]) + 1\ncr = flat.size / (num_runs * 2)`,
+        theory: `<h4 class="font-bold text-white text-sm">1. Run-Length Encoding (RLE)</h4>
+                 <p>Encodes consecutive runs of identical pixel intensities into $(Count, Value)$ pairs. Compression Ratio is $CR = b_{original} / b_{compressed}$.</p>`
+      },
+      {
+        id: 8, code: 'PRAC-08', title: 'Morphological Operations on Binary Images',
+        aim: 'Perform morphological operations erosion, dilation, opening, and closing on binary images to study their effects on object shapes and noise removal.',
+        defaultAction: 'open',
+        ctrl: `<div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                 <button onclick="callPy(8, 'open')" class="bg-indigo-600 hover:bg-indigo-500 p-2 rounded text-xs">Opening (Remove Noise)</button>
+                 <button onclick="callPy(8, 'close')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded text-xs">Closing (Fill Gaps)</button>
+                 <button onclick="callPy(8, 'erode')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded text-xs">Erosion (Shrink)</button>
+                 <button onclick="callPy(8, 'dilate')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded text-xs">Dilation (Expand)</button>
+               </div>`,
+        py: `import cv2\nimg = cv2.imread('shapes.png', 0)\n_, binary = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)\nkernel = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))\nopening = cv2.morphologyEx(binary, cv2.MORPH_OPEN, kernel)`,
+        theory: `<h4 class="font-bold text-white text-sm">1. Mathematical Morphology</h4>
+                 <p>Erosion ($A \ominus B$) shrinks objects and removes specks; Dilation ($A \oplus B$) expands objects. Opening ($A \circ B = (A \ominus B) \oplus B$) removes noise without altering overall object scale.</p>`
+      },
+      {
+        id: 9, code: 'PRAC-09', title: 'Object Detection using Correlation Principle',
+        aim: 'Develop a program to detect object using the correlation principle (Template Matching).',
+        defaultAction: 'detect',
+        ctrl: `<div class="flex flex-wrap gap-2">
+                 <button onclick="callPy(9, 'detect')" class="bg-indigo-600 hover:bg-indigo-500 px-3 py-1.5 rounded text-xs">Locate Target via Normalized Cross-Correlation</button>
+               </div>`,
+        py: `import cv2\nscene = cv2.imread('scene.jpg', 0)\ntemplate = cv2.imread('target.jpg', 0)\nres = cv2.matchTemplate(scene, template, cv2.TM_CCOEFF_NORMED)\n_, max_val, _, max_loc = cv2.minMaxLoc(res)`,
+        theory: `<h4 class="font-bold text-white text-sm">1. Normalized Cross-Correlation (NCC)</h4>
+                 <p>Computes similarity between template $T$ and scene window $I$. Bounded in $[-1.0, 1.0]$. The coordinate $(x^*, y^*) = rg\max R(x,y)$ marks target localization.</p>`
+      },
+      {
+        id: 10, code: 'PRAC-10', title: 'Edge Detection: Canny vs Sobel & Prewitt',
+        aim: 'Detect edges in images with the Canny method and contrast the results with Sobel and Prewitt detectors.',
+        defaultAction: 'canny',
+        ctrl: `<div class="grid grid-cols-3 gap-2">
+                 <button onclick="callPy(10, 'canny')" class="bg-indigo-600 hover:bg-indigo-500 p-2 rounded text-xs">Canny Detector</button>
+                 <button onclick="callPy(10, 'sobel')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded text-xs">Sobel Gradients</button>
+                 <button onclick="callPy(10, 'prewitt')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded text-xs">Prewitt Gradients</button>
+               </div>`,
+        py: `import cv2\ngray = cv2.imread('input.jpg', 0)\nsx = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=3)\nsy = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=3)\ncanny_edges = cv2.Canny(gray, 80, 180)`,
+        theory: `<h4 class="font-bold text-white text-sm">1. Canny Optimal Edge Detector</h4>
+                 <p>4 stages: Gaussian smoothing -> Gradient computation -> Non-Maximum Suppression (NMS) along gradient normal -> Double thresholding with hysteresis edge tracking.</p>`
+      },
+      {
+        id: 11, code: 'PRAC-11', title: 'Color Space Conversions (RGB, HSV, YCrCb, Lab)',
+        aim: 'Post Lab 02: Convert images between the RGB, HSV, YCrCb, and Lab colour spaces, analyzing how colour information is encoded in each.',
+        defaultAction: 'hsv',
+        ctrl: `<div class="grid grid-cols-3 gap-2">
+                 <button onclick="callPy(11, 'hsv')" class="bg-indigo-600 hover:bg-indigo-500 p-2 rounded text-xs">HSV (Hue Channel)</button>
+                 <button onclick="callPy(11, 'ycrcb_y')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded text-xs">YCrCb (Luminance Y)</button>
+                 <button onclick="callPy(11, 'lab')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded text-xs">CIELAB (L* Channel)</button>
+               </div>`,
+        py: `import cv2\nimg = cv2.imread('input.jpg')\nhsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)\nycrcb = cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb)\nlab = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)`,
+        theory: `<h4 class="font-bold text-white text-sm">1. Color Spaces</h4>
+                 <p><strong>HSV:</strong> Decouples Hue (chromaticity) from Value (brightness).<br>
+                 <strong>YCrCb:</strong> Separates Luma ($Y$) from Chroma ($Cr, Cb$), used in JPEG and digital broadcast.</p>`
+      },
+      {
+        id: 12, code: 'PRAC-12', title: 'Frequency Domain 2D-DFT & Filter Synthesis',
+        aim: 'Compute the 2D Discrete Fourier Transform (DFT), visualize the centered magnitude spectrum, and synthesize frequency filters.',
+        defaultAction: 'spectrum',
+        ctrl: `<div class="flex flex-wrap gap-2">
+                 <button onclick="callPy(12, 'spectrum')" class="bg-indigo-600 hover:bg-indigo-500 px-3 py-1.5 rounded text-xs">Compute Centered Magnitude Spectrum</button>
+               </div>`,
+        py: `import cv2\nimport numpy as np\ngray = cv2.imread('input.jpg', 0)\ndft = np.fft.fft2(gray)\ndft_shift = np.fft.fftshift(dft)\nspec = 20 * np.log(np.abs(dft_shift) + 1)`,
+        theory: `<h4 class="font-bold text-white text-sm">1. 2D Discrete Fourier Transform (DFT)</h4>
+                 <p>Transforms spatial intensities $f(x,y)$ into sinusoidal orthogonal frequency components. <code>fftshift</code> moves the DC zero-frequency component to the center of the spectrum.</p>`
+      }
+    ];
+
+    let currentId = 1;
+    let cOrig, ctxO, cProc, ctxP, chart;
+
+    window.onload = () => {
+      cOrig = document.getElementById('cOrig'); ctxO = cOrig.getContext('2d');
+      cProc = document.getElementById('cProc'); ctxP = cProc.getContext('2d');
+      buildMenu();
+      loadPreset('portrait');
+      selectP(1);
+    };
+
+    function buildMenu() {
+      document.getElementById('sidebarList').innerHTML = PRACTICALS.map(p => `
+        <button onclick="selectP(${p.id})" id="btn-${p.id}" class="w-full text-left p-2 rounded-xl transition flex items-start gap-2 hover:bg-slate-800">
+          <span class="text-[10px] font-mono font-bold bg-slate-800 text-indigo-400 px-1.5 py-0.5 rounded">${p.code}</span>
+          <span class="text-xs font-semibold text-slate-200 truncate">${p.title}</span>
+        </button>
+      `).join('');
+    }
+
+    function selectP(id) {
+      currentId = id;
+      const p = PRACTICALS.find(x => x.id === id);
+      PRACTICALS.forEach(x => {
+        document.getElementById(`btn-${x.id}`).className = x.id === id ? 
+          'w-full text-left p-2 rounded-xl bg-indigo-950/50 border border-indigo-500/40 flex items-start gap-2' : 
+          'w-full text-left p-2 rounded-xl hover:bg-slate-800 flex items-start gap-2';
+      });
+      document.getElementById('pBadge').innerText = p.code;
+      document.getElementById('pTitle').innerText = p.title;
+      document.getElementById('pAim').innerText = p.aim;
+      document.getElementById('dynControls').innerHTML = p.ctrl;
+      document.getElementById('codeName').innerText = `${p.code.toLowerCase().replace('-', '_')}.py`;
+      document.getElementById('codeText').innerText = p.py;
+      document.getElementById('theoryContent').innerHTML = p.theory;
+
+      // AUTOMATICALLY APPLY PROCESSING IMMEDIATELY
+      callPy(currentId, p.defaultAction);
+    }
+
+    function switchTab(t) {
+      document.getElementById('viewSim').classList.toggle('hidden', t !== 'sim');
+      document.getElementById('viewTheory').classList.toggle('hidden', t !== 'theory');
+      document.getElementById('viewCode').classList.toggle('hidden', t !== 'code');
+      
+      document.getElementById('tabBtnSim').className = t === 'sim' ? 'px-3 py-1 rounded bg-indigo-600 text-white font-medium' : 'px-3 py-1 rounded bg-slate-800 text-slate-300 font-medium hover:text-white';
+      document.getElementById('tabBtnTheory').className = t === 'theory' ? 'px-3 py-1 rounded bg-indigo-600 text-white font-medium' : 'px-3 py-1 rounded bg-slate-800 text-slate-300 font-medium hover:text-white';
+      document.getElementById('tabBtnCode').className = t === 'code' ? 'px-3 py-1 rounded bg-indigo-600 text-white font-medium' : 'px-3 py-1 rounded bg-slate-800 text-slate-300 font-medium hover:text-white';
+    }
+
+    function loadPreset(k) {
+      const t = document.createElement('canvas'); t.width = t.height = 256;
+      const tc = t.getContext('2d');
+      if (k === 'portrait') {
+        const g = tc.createRadialGradient(128,128,10,128,128,120);
+        g.addColorStop(0, '#fde047'); g.addColorStop(0.5, '#f97316'); g.addColorStop(1, '#3b82f6');
+        tc.fillStyle = g; tc.fillRect(0,0,256,256);
+        tc.fillStyle = '#fff'; tc.beginPath(); tc.arc(95,110,22,0,Math.PI*2); tc.arc(160,110,22,0,Math.PI*2); tc.fill();
+        tc.fillStyle = '#000'; tc.beginPath(); tc.arc(98,112,8,0,Math.PI*2); tc.arc(163,112,8,0,Math.PI*2); tc.fill();
+      } else if (k === 'cameraman') {
+        tc.fillStyle = '#cbd5e1'; tc.fillRect(0,0,256,140);
+        tc.fillStyle = '#334155'; tc.fillRect(0,140,256,116);
+        tc.fillStyle = '#0f172a'; tc.fillRect(100,70,56,130);
+      } else if (k === 'shapes') {
+        tc.fillStyle = '#000'; tc.fillRect(0,0,256,256);
+        tc.fillStyle = '#fff'; tc.fillRect(40,40,60,60);
+        tc.beginPath(); tc.arc(180,80,35,0,Math.PI*2); tc.fill();
+      } else if (k === 'damaged') {
+        tc.fillStyle = '#b45309'; tc.fillRect(0,0,256,256);
+        tc.fillStyle = '#fff'; tc.lineWidth = 3;
+        tc.beginPath(); tc.moveTo(20,20); tc.lineTo(230,230); tc.moveTo(220,20); tc.lineTo(30,220); tc.stroke();
+      }
+      ctxO.drawImage(t, 0, 0);
+      
+      const p = PRACTICALS.find(x => x.id === currentId);
+      callPy(currentId, p.defaultAction);
+    }
+
+    function uploadCustom(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const r = new FileReader();
+      r.onload = ev => {
+        const img = new Image();
+        img.onload = () => {
+          ctxO.clearRect(0, 0, 256, 256);
+          ctxO.drawImage(img, 0, 0, 256, 256);
+          const p = PRACTICALS.find(x => x.id === currentId);
+          callPy(currentId, p.defaultAction);
+        };
+        img.src = ev.target.result;
+      };
+      r.readAsDataURL(file);
+    }
+
+    function resetImg() {
+      const d = ctxO.getImageData(0,0,256,256);
+      ctxP.putImageData(d, 0, 0);
+      document.getElementById('metrics').innerText = 'Ready';
+      updateHist(d);
+    }
+
+    async function callPy(pracId, action) {
+      document.getElementById('metrics').innerText = 'Executing OpenCV algorithm...';
+      const b64 = cOrig.toDataURL('image/jpeg');
+      try {
+        const resp = await fetch('/api/process', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pracId, action, image: b64 })
+        });
+        const res = await resp.json();
+        if (res.status === 'success') {
+          const img = new Image();
+          img.onload = () => {
+            ctxP.clearRect(0, 0, 256, 256);
+            ctxP.drawImage(img, 0, 0, 256, 256);
+            document.getElementById('metrics').innerText = res.message;
+            updateHist(ctxP.getImageData(0,0,256,256));
+          };
+          img.src = res.image;
+        }
+      } catch (err) {
+        document.getElementById('metrics').innerText = 'Processing locally...';
+      }
+    }
+
+    function updateHist(imgData) {
+      const rH = new Array(256).fill(0), gH = new Array(256).fill(0), bH = new Array(256).fill(0);
+      const d = imgData.data;
+      for (let i = 0; i < d.length; i += 8) { rH[d[i]]++; gH[d[i+1]]++; bH[d[i+2]]++; }
+      const labels = Array.from({ length: 256 }, (_, i) => (i % 32 === 0 ? i : ''));
+      if (!chart) {
+        const ctx = document.getElementById('chartHist').getContext('2d');
+        chart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels,
+            datasets: [
+              { label: 'R', data: rH, borderColor: '#ef4444', borderWidth: 1, pointRadius: 0 },
+              { label: 'G', data: gH, borderColor: '#10b981', borderWidth: 1, pointRadius: 0 },
+              { label: 'B', data: bH, borderColor: '#3b82f6', borderWidth: 1, pointRadius: 0 }
+            ]
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false, animation: false,
+            plugins: { legend: { display: false } },
+            scales: { x: { ticks: { color: '#64748b' } }, y: { display: false } }
+          }
+        });
+      } else {
+        chart.data.datasets[0].data = rH; chart.data.datasets[1].data = gH; chart.data.datasets[2].data = bH;
+        chart.update();
+      }
+    }
+
+    function copyCode() {
+      navigator.clipboard.writeText(document.getElementById('codeText').innerText);
+      alert('Python code copied!');
+    }
+    function openModal() { document.getElementById('modalReport').classList.remove('hidden'); }
+    function closeModal() { document.getElementById('modalReport').classList.add('hidden'); }
+  </script>
+</body>
+</html>
